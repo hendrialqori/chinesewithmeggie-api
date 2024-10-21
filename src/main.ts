@@ -21,9 +21,6 @@ const PORT = 8000
 
 const app = express()
 
-const swaggerDocsFile = fs.readFileSync(path.join(__dirname, "api-docs", "swagger.yaml"), "utf-8")
-const swaggerDocs = YAML.parse(swaggerDocsFile)
-
 app.use(cors({
     credentials: true,
     origin: FRONTEND_ORIGIN,
