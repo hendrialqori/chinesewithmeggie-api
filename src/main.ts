@@ -24,6 +24,11 @@ const app = express()
 const swaggerDocsFile = fs.readFileSync(path.join(__dirname, "api-docs", "swagger.yaml"), "utf-8")
 const swaggerDocs = YAML.parse(swaggerDocsFile)
 
+app.use((req, res, next) => {
+    console.log(`Static file request: ${req.url}`);
+    next();
+});
+
 app.use(cors({
     credentials: true,
     origin: FRONTEND_ORIGIN,
