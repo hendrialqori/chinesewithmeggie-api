@@ -3,8 +3,8 @@ import fs from "node:fs"
 import winston from 'winston';
 
 
-export const generateMD5 = (filePath: string): Promise<string>  => {
-    return new Promise((res, rej) => {
+export const generateMD5 = (filePath: string): Promise<string> => {
+    return new Promise((resolve) => {
         const hash = crypto.createHash('md5');
         const rStream = fs.createReadStream(filePath);
 
@@ -12,7 +12,7 @@ export const generateMD5 = (filePath: string): Promise<string>  => {
             hash.update(data);
         });
         rStream.on('end', () => {
-            res(hash.digest('hex'));
+            resolve(hash.digest('hex'));
         });
     })
 }
