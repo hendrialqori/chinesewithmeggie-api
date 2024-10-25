@@ -10,7 +10,7 @@ import { ProductsValidation } from '../validation/products.validation'
 import { InsertProduct, Product } from '../types'
 
 import radash from 'radash'
-import { writeFile, unlink } from 'fs/promises'
+import { writeFile, unlink, mkdir, access } from 'fs/promises'
 import path from 'path'
 import { generateMD5 } from '../utils/helpers'
 
@@ -24,6 +24,9 @@ export default class ProductService {
         strikeoutPrice: productsTable.strikeoutPrice,
         description: productsTable.description,
     }
+
+    private static imageDirpath = path.join(__dirname, "..", "..", "public", "static")
+    private static zipDirPath = path.join(__dirname, "..", "..", "_zip")
 
     static async list() {
         const products = await db
@@ -86,13 +89,23 @@ export default class ProductService {
         if (!isImage) throw new Error.FileUploadError(400, "Image required")
         if (!isZip) throw new Error.FileUploadError(400, "Zip file required")
 
+        // dir selector
+        const imageDirpath = ProductService.imageDirpath
+        const zipDirPath = ProductService.zipDirPath
+
+        // read or create if dir doesn't exists
+        await ProductService.readOrCreateDir(imageDirpath)
+        await ProductService.readOrCreateDir(zipDirPath)
+
+        // setup store image
         const imageName = Date.now() + "-" + imageFile.originalname
         const imageBuffer = imageFile.buffer
-        const imagePath = path.join(__dirname, "..", "..", "public", "static", imageName);
+        const imagePath = path.join(imageDirpath, imageName);
 
+        // setup store zip file
         const zipName = `${Date.now()}-${zipFile.originalname}`
         const zipBuffer = zipFile.buffer
-        const zipPath = path.join(__dirname, "..", "..", "_zip", zipName);
+        const zipPath = path.join(zipDirPath, zipName);
 
         // store image file into directory
         await writeFile(imagePath, imageBuffer);
@@ -135,6 +148,10 @@ export default class ProductService {
         const productRequest = Validation.validate(ProductsValidation.ADD, body) as Product
         const updateProductPayload = structuredClone(productRequest)
 
+        // dir selector
+        const imageDirpath = ProductService.imageDirpath
+        const zipDirPath = ProductService.zipDirPath
+
         // previous product
         const prevProduct = await ProductService.get(id)
 
@@ -142,11 +159,11 @@ export default class ProductService {
         if (isImage) {
             const imageName = `${Date.now()}-${imageFile.originalname}`
             const imageBuffer = imageFile.buffer
-            const imagePath = path.join(__dirname, "..", "..", "public", "static", imageName);
+            const imagePath = path.join(imageDirpath, imageName);
             // insert new image
             await writeFile(imagePath, imageBuffer)
             // remove previous image
-            const prevImagePath = path.join(__dirname, "..", "..", "public", "static", prevProduct.image)
+            const prevImagePath = path.join(imageDirpath, prevProduct.image)
             await unlink(prevImagePath)
 
             updateProductPayload.image = imageName
@@ -156,13 +173,13 @@ export default class ProductService {
         if (isZip) {
             const zipName = `${Date.now()}-${zipFile.originalname}`
             const zipBuffer = zipFile.buffer
-            const zipPath = path.join(__dirname, "..", "..", "_zip", zipName);
+            const zipPath = path.join(zipDirPath, zipName);
             // insert new zip
             await writeFile(zipPath, zipBuffer)
             // generate new MD%
             const zipMd5 = await generateMD5(zipPath)
             // remove previous zip
-            const prevZipPath = path.join(__dirname, "..", "..", "_zip", prevProduct.zipPath)
+            const prevZipPath = path.join(zipDirPath, prevProduct.zipPath)
             await unlink(prevZipPath)
 
             updateProductPayload.zipPath = zipName
@@ -186,10 +203,15 @@ export default class ProductService {
     static async remove(id: number) {
         // check are there product ?
         const product = await ProductService.get(id)
+
+        // dir selector
+        const imageDirpath = ProductService.imageDirpath
+        const zipDirPath = ProductService.zipDirPath
+
         // remove image from static dir
-        const imagePath = path.join(__dirname, "..", "..", "public", "static", product.image)
-        const zipPath = path.join(__dirname, "..", "..", "_zip", product.zipPath)
-        
+        const imagePath = path.join(imageDirpath, product.image)
+        const zipPath = path.join(zipDirPath, product.zipPath)
+
         await unlink(imagePath)
         await unlink(zipPath)
 
@@ -201,5 +223,13 @@ export default class ProductService {
     static async forceIsOfferEqualIsFalse() {
         const data = { isOffer: false } as unknown as InsertProduct
         await db.update(productsTable).set(data)
+    }
+
+    static async readOrCreateDir(dirPath: string) {
+        try {
+            await access(dirPath)
+        } catch (error) {
+            await mkdir(dirPath, { recursive: true })
+        }
     }
 }
