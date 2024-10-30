@@ -5,12 +5,15 @@ import compression from "compression"
 import cookieParser from "cookie-parser"
 import helmet from "helmet"
 import morgan from "morgan"
+import path from "path";
+import fs from "node:fs"
 
 import apiRouter from "./routes";
 import { errorResponse } from "./middlewares/error.middleware";
 import { rateLimiter } from "./middlewares/rate-limit.middleware";
 import { FRONTEND_ORIGIN } from "./constant";
-import path from "path";
+import swaggerUi from "swagger-ui-express"
+import YAML from "yaml"
 
 dotenv.config()
 
@@ -18,11 +21,16 @@ const PORT = 8000
 
 const app = express()
 
+const swaggerDocsFile = fs.readFileSync(path.join(__dirname, "api-docs", "swagger.yaml"), "utf-8")
+const swaggerDocs = YAML.parse(swaggerDocsFile)
+
 app.use(cors({
     credentials: true,
     origin: FRONTEND_ORIGIN,
     exposedHeaders: "X-Filename"
 }))
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms"))
 

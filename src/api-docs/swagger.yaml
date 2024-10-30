@@ -1,0 +1,67 @@
+openapi: "3.0.0"
+
+info:
+  title: "Chinesewithmeggie API"
+  version: "1.0.0"
+  description: "API documentation for chinesewithmeggie website"
+
+servers:
+  - url: "http://localhost:3000/api/v1"
+    description: "Local server"
+
+tags:
+  - name: "auth"
+    description: Provides API for authentication such as login/register
+
+paths:
+
+  /auth/register:
+    post:
+      tags: 
+        - auth
+      summary: "Register new user"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                email:
+                  type: "string"
+                username:
+                  type: "string"
+                password:
+                  type: "string"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data: 
+                    value: null
+                  message:
+                    value: "Successfully created"
+                  
+
+
+
+  # /users:
+  #   get:
+  #     summary: "Retrieve a list of users"
+  #     responses:
+  #       '200':
+  #         description: "A list of users."
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: "array"
+  #               items:
+  #                 type: "object"
+  #                 properties:
+  #                   id:
+  #                     type: "integer"
+  #                   name:
+  #                     type: "string"   
