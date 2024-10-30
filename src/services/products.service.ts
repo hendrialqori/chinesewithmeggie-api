@@ -21,7 +21,7 @@ export default class ProductService {
         image: productsTable.image,
         title: productsTable.title,
         originalPrice: productsTable.originalPrice,
-        strikeoutPrice: productsTable.strikeoutPrice,
+        discountPrice: productsTable.discountPrice,
         description: productsTable.description,
     }
 

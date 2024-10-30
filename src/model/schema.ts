@@ -1,4 +1,7 @@
-import { mysqlTable, mysqlEnum, int, bigint, varchar, text, timestamp, boolean } from 'drizzle-orm/mysql-core';
+import {
+    mysqlTable, mysqlEnum, int, bigint,
+    varchar, text, timestamp, boolean
+} from 'drizzle-orm/mysql-core';
 import { relations } from 'drizzle-orm';
 import { STATUS } from '../constant';
 
@@ -19,7 +22,7 @@ export const products = mysqlTable(PRODDUCTS, {
     title: varchar("title", { length: 100 }).notNull(),
     image: text("image").notNull(),
     originalPrice: int("originalPrice").notNull(),
-    strikeoutPrice: int("strikeoutPrice").notNull(),
+    discountPrice: int("discountPrice").notNull(),
     isOffer: boolean("isOffer").default(false),
     zipPath: text("zipPath").notNull(),
     zipMd5: text("zipMd5").notNull(),

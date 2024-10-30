@@ -9,7 +9,7 @@ export class ProductsValidation {
             .min(1)
             .refine((price) => !onlyDigits.test(price), "Invalid input, Please enter a valid number")
             .transform((price) => Number(price)),
-        strikeoutPrice: z.string()
+        discountPrice: z.string()
             .min(1)
             .refine((price) => !onlyDigits.test(price), "Invalid input, Please enter a valid number")
             .transform((price) => Number(price)),
