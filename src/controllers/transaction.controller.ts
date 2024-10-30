@@ -76,4 +76,13 @@ export default class TransactionsController {
             next(error)
         }
     }
+
+    static async exportCsv(req: Request, res: Response, next: NextFunction) {
+        try {
+            await TransactionService.exportCsv(req, res)
+
+        } catch (error) {
+            next(error)
+        }
+    }
 }

@@ -5,7 +5,6 @@ import PaymentController from '../controllers/payment.controller';
 import TransactionsController from '../controllers/transaction.controller';
 import { accessValidation } from '../middlewares/auth.middleware';
 import { fileUpload } from '../configs/file-upload';
-import { encrypt, decrypt } from '../utils/cipher';
 
 const apiRouter = express.Router()
 const ROUTE = "/api/v1"
@@ -31,6 +30,7 @@ apiRouter.delete(`${ROUTE}/product/:id/remove`, accessValidation, ProductsContro
 
 //transactions
 apiRouter.get(`${ROUTE}/transaction/list`, accessValidation, TransactionsController.list)
+apiRouter.get(`${ROUTE}/transaction/export`, accessValidation, TransactionsController.exportCsv)
 apiRouter.get(`${ROUTE}/transaction/:id`, accessValidation, TransactionsController.get)
 
 // payment

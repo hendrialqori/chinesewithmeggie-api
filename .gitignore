@@ -3,3 +3,4 @@
 
 .env
 tsconfig.tsbuildinfo
+pnpm-lock.yaml
