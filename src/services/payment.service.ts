@@ -104,7 +104,7 @@ export default class PaymentService {
         const invoiceData: CreateInvoiceRequest = {
             externalId: `trx_${Date.now()}_${transaction.email}`,
             currency: "IDR",
-            amount: product.originalPrice,
+            amount: product.discountPrice,
             customer: {
                 email: transaction.email,
                 mobileNumber: String(transaction.phone),
@@ -115,7 +115,7 @@ export default class PaymentService {
                 {
                     referenceId: String(product.id),
                     name: product.title ?? "",
-                    price: product.originalPrice,
+                    price: product.discountPrice,
                     quantity: 1,
                     category: "Ebook",
                 }
