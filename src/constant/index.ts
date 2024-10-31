@@ -1,4 +1,6 @@
 //.env
+export const PRODUCTION_MODE = process.env.NODE_ENV === "production"
+
 export const SECRET_KEY = process.env.SECRET_KEY
 export const DATABASE_URL = process.env.DATABASE_URL
 export const SERVER_ORIGIN = process.env.SERVER_ORIGIN

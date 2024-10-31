@@ -9,7 +9,7 @@ import { ProductsValidation } from '../validation/products.validation'
 // import { winstonLogger } from '../utils/helpers'
 import { InsertProduct, Product } from '../types'
 
-import radash from 'radash'
+import * as radash from 'radash'
 import { writeFile, unlink, mkdir, access } from 'fs/promises'
 import path from 'path'
 import { generateMD5 } from '../utils/helpers'
