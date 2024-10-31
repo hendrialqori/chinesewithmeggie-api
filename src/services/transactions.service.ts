@@ -2,7 +2,7 @@ import { Buffer } from "node:buffer";
 import type { Request, Response } from "express";
 import { eq, gte, lte, desc, sql, and, type SQL } from "drizzle-orm";
 import { db } from "../model/db";
-import radash from "radash"
+import * as radash from "radash"
 import dayjs from "dayjs"
 import {
     transactions as transactionsTable,
@@ -13,7 +13,7 @@ import { Validation } from "../validation/validation";
 import { TransactionsValidation } from "../validation/transactions.validation";
 import { ResponseError } from "../utils/errors";
 
-import { mkConfig, generateCsv, asString } from "export-to-csv";
+import { exportToCSV } from "../utils/export-to-csv";
 
 
 export class TransactionService {
@@ -174,20 +174,35 @@ export class TransactionService {
                 .innerJoin(productsTable, eq(transactionsTable.productId, productsTable.id))
                 .where(whereClause)
 
-        // csv config
-        const config = mkConfig({ useKeysAsHeaders: true })
         // mock data
-        const mockData = transactions.map((trx) => ({ ...trx, tanggal: new Date(trx.tanggal).toString() }))
-        // filename
-        const filename = `${Date.now()}-${config.filename}.csv`;
-        // generate csv
-        const csv = generateCsv(config)(mockData)
-        // csv buffer
-        const csvBuffer = new Uint8Array(Buffer.from(asString(csv)));
+        const initialMock = [
+            {
+                tanggal: "" as unknown as Date,
+                email: "",
+                phone: "",
+                status_pembayaran: "",
+                nama_produk: "",
+                harga_produk: "",
+                invoice_url: ""
+            }
+        ] as any[]
 
-        res.setHeader("Content-Disposition", `attachment; filename=${filename}`)
+        const mockData =
+            transactions.length ?
+                transactions.map((trx) =>
+                    ({ ...trx, tanggal: new Date(trx.tanggal as unknown as string).toString() }))
+                : initialMock
+
+        // csv data
+        const csvData = exportToCSV(mockData)
+
+        res.setHeader("Content-Disposition", "attachment; filename=transaction-report.csv")
         res.setHeader("Content-Type", "text/csv")
+        res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.set('Pragma', 'no-cache');
+        res.set('Expires', '0');
+        res.set('Surrogate-Control', 'no-store');
 
-        res.send(Buffer.from(csvBuffer).toString())
+        res.send(csvData)
     }
 }
