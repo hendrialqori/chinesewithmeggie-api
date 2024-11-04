@@ -11,13 +11,11 @@ import fs from "node:fs"
 import apiRouter from "./routes";
 import { errorResponse } from "./middlewares/error.middleware";
 import { rateLimiter } from "./middlewares/rate-limit.middleware";
-import { FRONTEND_ORIGIN } from "./constant";
+import { FRONTEND_ORIGIN, PORT } from "./constant";
 import swaggerUi from "swagger-ui-express"
 import YAML from "yaml"
 
 dotenv.config()
-
-const PORT = 8000
 
 const app = express()
 
