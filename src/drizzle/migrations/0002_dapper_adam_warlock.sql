@@ -1,1 +1,0 @@
-ALTER TABLE `products` RENAME COLUMN `strikeoutPrice` TO `discountPrice`;

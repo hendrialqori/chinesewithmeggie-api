@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "603aecba-ff26-4063-8b44-c4af08722f8c",
-  "prevId": "8ff41935-9a99-414a-bd17-9ccaf9bdf3ed",
+  "id": "62a2e673-9060-4a8a-ae44-48ab4fb47033",
+  "prevId": "3f0bdfe6-98fe-47a0-9587-5d8205414239",
   "tables": {
     "products": {
       "name": "products",
@@ -169,9 +169,9 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "updatedAt": {
@@ -179,7 +179,8 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(now())"
         }
       },
       "indexes": {},

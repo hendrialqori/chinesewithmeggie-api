@@ -1,12 +1,12 @@
 CREATE TABLE `products` (
 	`id` int AUTO_INCREMENT NOT NULL,
-	`title` varchar(100),
-	`image` text,
+	`title` varchar(100) NOT NULL,
+	`image` text NOT NULL,
 	`originalPrice` int NOT NULL,
-	`strikeoutPrice` int NOT NULL,
+	`discountPrice` int NOT NULL,
 	`isOffer` boolean DEFAULT false,
-	`zipPath` text,
-	`zipMd5` text,
+	`zipPath` text NOT NULL,
+	`zipMd5` text NOT NULL,
 	`description` text,
 	`createdAt` timestamp DEFAULT (now()),
 	`updatedAt` timestamp DEFAULT (now()),
@@ -23,8 +23,8 @@ CREATE TABLE `transactions` (
 	`invoiceId` text,
 	`invoiceUrl` text,
 	`status` enum('PENDING','SETTLED','FAILED') DEFAULT 'PENDING',
-	`createdAt` timestamp DEFAULT (now()),
-	`updatedAt` timestamp DEFAULT (now()),
+	`createdAt` timestamp DEFAULT NOW(),
+	`updatedAt` timestamp DEFAULT NOW(),
 	CONSTRAINT `transactions_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint

@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "0ba91e28-698d-47d3-a7a7-601a3dc714f9",
-  "prevId": "2c6ce5a1-aaa3-4da7-9d2e-a83961b749b5",
+  "id": "3f0bdfe6-98fe-47a0-9587-5d8205414239",
+  "prevId": "603aecba-ff26-4063-8b44-c4af08722f8c",
   "tables": {
     "products": {
       "name": "products",
@@ -28,15 +28,15 @@
           "notNull": true,
           "autoincrement": false
         },
-        "discountPrice": {
-          "name": "discountPrice",
+        "originalPrice": {
+          "name": "originalPrice",
           "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "originalPrice": {
-          "name": "originalPrice",
+        "discountPrice": {
+          "name": "discountPrice",
           "type": "int",
           "primaryKey": false,
           "notNull": true,
@@ -169,19 +169,17 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp",
+          "type": "datetime",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
+          "autoincrement": false
         },
         "updatedAt": {
           "name": "updatedAt",
-          "type": "timestamp",
+          "type": "datetime",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -266,9 +264,7 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {
-      "\"products\".\"strikeoutPrice\"": "\"products\".\"discountPrice\""
-    }
+    "columns": {}
   },
   "internal": {
     "tables": {},

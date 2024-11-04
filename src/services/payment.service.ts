@@ -23,6 +23,10 @@ import { StatusCodes } from "http-status-codes";
 import path from "path";
 import * as cipher from "../utils/cipher";
 
+import utc from "dayjs/plugin/utc"
+import dayjs from "dayjs"
+dayjs.extend(utc)
+
 
 export default class PaymentService {
     private static invoiceClient = XENDIT_CLIENT.Invoice
@@ -56,19 +60,27 @@ export default class PaymentService {
 
     static async createTrx(payload: InsertTransaction) {
         // validation
-        const transactionValidation =
+        const trxRequest =
             Validation.validate(TransactionsValidation.ADD, payload)
         // check is there product with id = validation.productId
         const product =
-            await ProductService.get(transactionValidation.productId)
+            await ProductService.get(trxRequest.productId)
+
+
         // create transaction record
+
+        const trxPayload: InsertTransaction = {
+            ...trxRequest,
+            createdAt: dayjs().utc().toDate()
+        }
+
         const [transaction] = await db
             .insert(transactionsTable)
-            .values(transactionValidation)
+            .values(trxPayload)
             .$returningId()
 
         return {
-            transaction: { id: transaction.id, ...transactionValidation },
+            transaction: { id: transaction.id, ...trxRequest },
             product
         }
     }
@@ -83,7 +95,7 @@ export default class PaymentService {
     static async updateTrxPaymentStatus(payload:
         { externalId: string; status: typeof STATUS[number] }
     ) {
-        const data = { status: payload.status } as unknown as InsertTransaction
+        const data = { status: payload.status, updatedAt: dayjs().utc().toDate() } as unknown as InsertTransaction
 
         // first check, is there trx with externalId = payload.externalId
         await PaymentService.getTrx(payload.externalId)

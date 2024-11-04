@@ -3,7 +3,6 @@ import type { Request, Response } from "express";
 import { eq, gte, lte, desc, sql, and, type SQL } from "drizzle-orm";
 import { db } from "../model/db";
 import * as radash from "radash"
-import dayjs from "dayjs"
 import {
     transactions as transactionsTable,
     products as productsTable
@@ -12,9 +11,11 @@ import { Query, type InsertTransaction, Transaction } from "../types";
 import { Validation } from "../validation/validation";
 import { TransactionsValidation } from "../validation/transactions.validation";
 import { ResponseError } from "../utils/errors";
-
 import { exportToCSV } from "../utils/export-to-csv";
 
+import utc from "dayjs/plugin/utc"
+import dayjs from "dayjs"
+dayjs.extend(utc)
 
 export class TransactionService {
     private static COLUMN = {
@@ -53,8 +54,10 @@ export class TransactionService {
         const page = Number(query.page)
         const limit = Number(query.limit)
         const offset = Number((page - 1) * limit)
-        const start_date = query.start_date ? new Date(query.start_date) : undefined
-        const end_date = query.end_date ? dayjs(query.end_date).add(1, "day").toDate() : undefined
+        const start_date = query.start_date ? dayjs(query.start_date).utc().toDate() : undefined
+        const end_date = query.end_date ? dayjs(query.end_date).utc().add(1, "day").toDate() : undefined
+
+        console.log({ start_date, end_date })
 
         // Placeholder condition incase we don't have any filters
         const condition = [] as SQL<unknown>[]
@@ -94,6 +97,8 @@ export class TransactionService {
             total_row: totalTransaction
         }
 
+        console.log(dayjs().utc().toISOString())
+
         return {
             transactions,
             meta
@@ -116,32 +121,6 @@ export class TransactionService {
         return transaction
     }
 
-    static async add(request: Request) {
-        const body = request.body as InsertTransaction
-        const transactionRequest = Validation.validate(TransactionsValidation.ADD, body)
-
-        const newtransaction =
-            await db.insert(transactionsTable).values(transactionRequest).$returningId()
-
-        return { ...newtransaction[0], ...transactionRequest }
-    }
-
-    static async updateStatus(id: number, request: Request) {
-        const body = request.body as Pick<Transaction, "status">
-        const transactionRequest = Validation.validate(TransactionsValidation.UPDATE_STATUS, body)
-
-        // check is there transaction with id = [id]
-        await TransactionService.get(id)
-
-        const updateStatusTransaction = {
-            status: transactionRequest.status
-        } as unknown as InsertTransaction
-
-        await db.update(transactionsTable)
-            .set(updateStatusTransaction)
-            .where(eq(transactionsTable.id, id))
-
-    }
 
     static async remove(id: number) {
         // check is there transaction with id
@@ -155,8 +134,8 @@ export class TransactionService {
         // query params
         const query = req.query as unknown as Query
 
-        const start_date = query.start_date ? new Date(query.start_date) : undefined
-        const end_date = query.end_date ? dayjs(query.end_date).add(1, "day").toDate() : undefined
+        const start_date = query.start_date ? dayjs(query.start_date).utc().toDate() : undefined
+        const end_date = query.end_date ? dayjs(query.end_date).utc().add(1, "day").toDate() : undefined
         const condition = [] as SQL<unknown>[]
 
         if (start_date && end_date) {

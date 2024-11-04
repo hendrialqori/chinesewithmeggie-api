@@ -47,8 +47,8 @@ export const transactions = mysqlTable(TRANSACTIONS, {
     invoiceId: text("invoiceId"), // from invoice xendit
     invoiceUrl: text("invoiceUrl"), // from invoice xendit
     status: mysqlEnum("status", STATUS).default("PENDING"),
-    createdAt: timestamp("createdAt").defaultNow(),
-    updatedAt: timestamp("updatedAt").defaultNow()
+    createdAt: timestamp("createdAt").notNull(),
+    updatedAt: timestamp("updatedAt")
 })
 
 export const transactionsRelations = relations(transactions, ({ one }) => ({

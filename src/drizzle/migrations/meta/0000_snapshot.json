@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "80ce3cba-8cf9-4c7d-94a2-21d8b66ce5fe",
+  "id": "8ff41935-9a99-414a-bd17-9ccaf9bdf3ed",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "products": {
@@ -18,14 +18,14 @@
           "name": "title",
           "type": "varchar(100)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "image": {
           "name": "image",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "originalPrice": {
@@ -35,8 +35,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "strikeoutPrice": {
-          "name": "strikeoutPrice",
+        "discountPrice": {
+          "name": "discountPrice",
           "type": "int",
           "primaryKey": false,
           "notNull": true,
@@ -54,14 +54,14 @@
           "name": "zipPath",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "zipMd5": {
           "name": "zipMd5",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "description": {
@@ -173,7 +173,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "(now())"
+          "default": "NOW()"
         },
         "updatedAt": {
           "name": "updatedAt",
@@ -181,7 +181,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "(now())"
+          "default": "NOW()"
         }
       },
       "indexes": {},
