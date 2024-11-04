@@ -32,37 +32,7 @@ export default class TransactionsController {
             next(error)
         }
     }
-
-    static async add(req: Request, res: Response, next: NextFunction) {
-        try {
-            const newtransaction = await TransactionService.add(req)
-
-            return res
-                .status(StatusCodes.OK)
-                .send({
-                    data: newtransaction,
-                    message: "Successfully added new transaction"
-                })
-
-        } catch (error) {
-            next(error)
-        }
-    }
-
-    static async updateStatus(req: Request, res: Response, next: NextFunction) {
-        try {
-            const params = req.params as unknown as { id: number }
-            await TransactionService.updateStatus(params.id, req)
-
-            return res
-                .status(StatusCodes.CREATED)
-                .json({ message: `Successfully update status product with id ${params.id}` })
-
-        } catch (error) {
-            next(error)
-        }
-    }
-
+    
     static async remove(req: Request, res: Response, next: NextFunction) {
         try {
             const params = req.params as unknown as { id: number }
