@@ -60,7 +60,7 @@ export default class AuthService {
         }
 
         // Number of salt rounds (the higher, the more secure but slower the hash generation) 
-        const saltRounds = 10
+        const saltRounds = await bycript.genSalt(10)
         // hashing password
         const hashingPassword = await bycript.hash(registerRequest.password, saltRounds)
         // store data for new user
