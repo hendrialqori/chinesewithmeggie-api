@@ -6,7 +6,7 @@ import ejs from "ejs"
 
 import { XENDIT_CLIENT } from "../configs/xendit-client";
 import ProductService from "./products.service";
-import { InsertTransaction } from "../types";
+import { InsertTransaction } from "../@types";
 import { Validation } from "../validation/validation";
 import { TransactionsValidation } from "../validation/transactions.validation";
 

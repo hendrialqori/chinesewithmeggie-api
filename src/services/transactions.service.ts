@@ -7,7 +7,7 @@ import {
     transactions as transactionsTable,
     products as productsTable
 } from "../model/schema";
-import { Query, type InsertTransaction, Transaction } from "../types";
+import { Query, type InsertTransaction, Transaction } from "../@types";
 import { Validation } from "../validation/validation";
 import { TransactionsValidation } from "../validation/transactions.validation";
 import { ResponseError } from "../utils/errors";

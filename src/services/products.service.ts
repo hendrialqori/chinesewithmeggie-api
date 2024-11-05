@@ -7,7 +7,7 @@ import { Validation } from '../validation/validation'
 import { ProductsValidation } from '../validation/products.validation'
 
 // import { winstonLogger } from '../utils/helpers'
-import { InsertProduct, Product } from '../types'
+import { InsertProduct, Product } from '../@types'
 
 import * as radash from 'radash'
 import { writeFile, unlink, mkdir, access } from 'fs/promises'
