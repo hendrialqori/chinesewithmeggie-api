@@ -15,13 +15,14 @@ const uploadHandlers = fileUpload.fields([
 ])
 
 // auth
-apiRouter.post(`${ROUTE}/auth/register`, AuthController.register)
+// apiRouter.post(`${ROUTE}/auth/register`, AuthController.register)
 apiRouter.post(`${ROUTE}/auth/login`, AuthController.login)
+apiRouter.get(`${ROUTE}/auth/credential`, accessValidation, AuthController.credential)
+apiRouter.put(`${ROUTE}/auth/update`, accessValidation, AuthController.update)
 
 // products
 apiRouter.get(`${ROUTE}/product/list/public`, ProductsController.list)
 apiRouter.get(`${ROUTE}/product/offer/public`, ProductsController.getOffer)
-
 apiRouter.get(`${ROUTE}/product/list`, accessValidation, ProductsController.listPrivate)
 apiRouter.get(`${ROUTE}/product/:id`, accessValidation, ProductsController.get)
 apiRouter.post(`${ROUTE}/product/add`, [accessValidation, uploadHandlers], ProductsController.add)
