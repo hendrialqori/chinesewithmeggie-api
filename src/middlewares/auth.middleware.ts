@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken"
 import { AuthenticationError } from "../utils/errors";
 import { SECRET_KEY } from "../constant";
 import { StatusCodes } from "http-status-codes";
+import { JWTPaylod } from "../@types";
 
 export async function accessValidation(req: Request, _res: Response, next: NextFunction) {
     try {
@@ -11,9 +12,9 @@ export async function accessValidation(req: Request, _res: Response, next: NextF
         // token
         const token = authorization.split(" ")[1]
         // verify token
-        const payload = jwt.verify(token, SECRET_KEY)
-        //@ts-ignore
-        req.payload = payload
+        const currentUser = jwt.verify(token, SECRET_KEY) as JWTPaylod['user']
+
+        (req as Request & JWTPaylod).user = currentUser
 
         next()
 
