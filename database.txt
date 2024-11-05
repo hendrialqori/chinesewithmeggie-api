@@ -1,5 +1,0 @@
-- Generate migration
-pnpm drizzle-kit generate
-
-- Run migration
-pnpm tsx src/model/migrate.ts
