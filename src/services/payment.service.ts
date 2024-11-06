@@ -201,7 +201,7 @@ export default class PaymentService {
 
         const emailPayload = {
             buyer: transaction.name,
-            image: `${SERVER_ORIGIN}/static/${product.image}`,
+            image: encodeURIComponent(`${SERVER_ORIGIN}/static/${product.image}`),
             product: product.title,
             email: transaction.email,
             link: `${FRONTEND_ORIGIN}/claim/${encrypted}`
