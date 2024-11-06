@@ -76,6 +76,7 @@ export default class ProductService {
     static async add(request: Request) {
         const body = request.body as InsertProduct
         const imageFile = request.files['image'][0] as Express.Multer.File
+
         const zipFile = request.files["zip"][0] as Express.Multer.File
 
         //validation product body
@@ -98,7 +99,7 @@ export default class ProductService {
         await ProductService.readOrCreateDir(zipDirPath)
 
         // setup store image
-        const imageName = Date.now() + "-" + imageFile.originalname
+        const imageName = [String(Date.now()), ".", imageFile.mimetype.split("/")[1]].join("")
         const imageBuffer = imageFile.buffer
         const imagePath = path.join(imageDirpath, imageName);
 
@@ -157,7 +158,7 @@ export default class ProductService {
 
         // if user upload new image
         if (isImage) {
-            const imageName = `${Date.now()}-${imageFile.originalname}`
+            const imageName = [String(Date.now()), ".", imageFile.mimetype.split("/")[1]].join("")
             const imageBuffer = imageFile.buffer
             const imagePath = path.join(imageDirpath, imageName);
             // insert new image
