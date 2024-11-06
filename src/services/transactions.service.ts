@@ -57,8 +57,6 @@ export class TransactionService {
         const start_date = query.start_date ? dayjs(query.start_date).utc().toDate() : undefined
         const end_date = query.end_date ? dayjs(query.end_date).utc().add(1, "day").toDate() : undefined
 
-        console.log({ start_date, end_date })
-
         // Placeholder condition incase we don't have any filters
         const condition = [] as SQL<unknown>[]
 
@@ -96,8 +94,6 @@ export class TransactionService {
             to: Math.min(limit * page, totalTransaction),
             total_row: totalTransaction
         }
-
-        console.log(dayjs().utc().toISOString())
 
         return {
             transactions,
