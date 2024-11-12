@@ -1,4 +1,3 @@
-import { Buffer } from "node:buffer";
 import type { Request, Response } from "express";
 import { eq, gte, lte, desc, sql, and, type SQL } from "drizzle-orm";
 import { db } from "../model/db";
@@ -7,9 +6,7 @@ import {
     transactions as transactionsTable,
     products as productsTable
 } from "../model/schema";
-import { Query, type InsertTransaction, Transaction } from "../@types";
-import { Validation } from "../validation/validation";
-import { TransactionsValidation } from "../validation/transactions.validation";
+import { Query } from "../@types";
 import { ResponseError } from "../utils/errors";
 import { exportToCSV } from "../utils/export-to-csv";
 
@@ -41,6 +38,7 @@ export class TransactionService {
 
     private static MOCK_CSV = {
         tanggal: transactionsTable.createdAt,
+        name: transactionsTable.name,
         email: transactionsTable.email,
         phone: transactionsTable.phone,
         status_pembayaran: transactionsTable.status,
@@ -153,6 +151,7 @@ export class TransactionService {
         const initialMock = [
             {
                 tanggal: "" as unknown as Date,
+                name: "",
                 email: "",
                 phone: "",
                 status_pembayaran: "",
